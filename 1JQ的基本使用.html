@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+        /*
+         $ git add test.txt 添加一个文件
+         $ git status       查看仓库状态
+         $ git commit -m "add test.txt"  更新缓存区
+         如果添加错了 可以删除
+         $ rm test.txt  但是这个时候你手残  $ rm test1.txt 删除错了
+         不要担心 如果在你没有 删除$ rm test1.txt 之前你 commit 过就没事
+         直接 $ git checkout -- test.txt
+         * */
+        var iQuery = function (dom) {
+//            return {};
+            var obj = {
+                ready: function (func,num) {
+
+                    //console.log("我是ready");
+                    //func();
+                    // 判断一下 docuemnt.onload 有没有被赋值（或者说有没有这个事件）
+                    // 1.有：接收一个旧的函数，然后呢，我先去调用新的函数，接着再调用旧的函数
+                    // 2.没有：直接赋值个onload事件
+
+
+                    //这点那个老师讲的很垃圾 是我 我自己查https://zhidao.baidu.com/question/278370304.html
+                    //懂得
+                    // 第一次 window.onload还没有赋值 函数所以 window.onload还是 obj类型
+                    // 所以直接 运行else 吧window.onload 赋值 传过来的 函数
+                    // 第二次  运行window.onload 的类型 就是 函数了 function了.
+
+                    //
+
+                    if (typeof dom.onload === "function") {
+
+                        //这里很巧妙
+                        // 第二次 dom.onload;是第一次 传过来的func
+                        /*
+                           第三次dom.onload 是
+                         function () {
+                         // 调用新的函数
+                         func();
+                         // 调用旧的函数
+                         oldFunc();
+                         }
+                        * */
+                        var oldFunc = dom.onload;
+
+                        dom.onload = function () {
+                            // 调用新的函数
+                            func();
+                            // 调用旧的函数
+                            oldFunc();
+                        }
+                    } else {
+                        //这里是第一次
+                        dom.onload = func;
+                    }
+                }
+            };
+            return obj;
+        };
+        //1f
+        iQuery(window).ready(function () {
+            alert("第一调用");
+        },"我是第一次");
+        //2f
+        iQuery(window).ready(function () {
+            alert("第二调用");
+        },"我是第二次");
+        //3f
+        iQuery(window).ready(function () {
+            alert("第三调用");
+        },"我是第三次");
+//
+
+
+    </script>
+</head>
+<body>
+<input type="button" value="我是按钮" id="btn"/>
+</body>
+</html>
